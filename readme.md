@@ -9,6 +9,7 @@
 
 **###### Run next commands in the Command line:**
 1) `docker-compose up`
+Wait while installing all
 2) `npm install`
 3) `npm rum production`
 
