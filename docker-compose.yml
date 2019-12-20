@@ -1,0 +1,42 @@
+version: '3'
+services:
+    web:
+        build:
+            context: ./
+            dockerfile: deploy/web.docker
+        volumes:
+            - ./:/var/www
+        ports:
+            - "8080:80"
+        links:
+            - app
+    app:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        volumes:
+            - ./:/var/www
+        links:
+            - redis
+            - database
+        environment:
+            - "APP_DEBUG=true"
+            - "DB_PORT=3306"
+            - "DB_HOST=database"
+            - "DB_USERNAME=root"
+            - "DB_PASSWORD=secret"
+            - "REDIS_PORT=6379"
+            - "REDIS_HOST=redis"
+    database:
+        image: mysql:5.7
+        environment:
+            - "MYSQL_ROOT_PASSWORD=secret"
+            - "MYSQL_DATABASE=kaltura"
+        ports:
+            - "33061:3306"
+        volumes:
+            - ./mysql:/var/lib/mysql
+    redis:
+        image: redis:3.0
+        ports:
+            - "63791:6379"
